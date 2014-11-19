@@ -29,3 +29,11 @@ my vim set up
 * git submodule init
 
 * git submodule update
+
+or roll into one when installing on a different machine
+
+* git submodule update --init
+
+upgrading all bundle plugins
+
+* git submodule foreach git pull origin master

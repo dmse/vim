@@ -43,6 +43,36 @@ set noswapfile
 set number
 set ruler
 
+let mapleader = " "
+
+" buffer navigation
+set hidden
+nnoremap <leader>h :bp<CR>
+nnoremap <leader>j :bn<CR>
+nnoremap <leader>bl :ls<CR>
+
+" tab navigation
 nnoremap <C-h> :tabprev<CR>
 nnoremap <C-j> :tabnext<CR>
 nnoremap <C-n> :tabnew<CR>
+
+" see: :help 'statusline
+" statusline mod
+set statusline=         "reset
+set statusline+=%#todo# "set color
+set statusline+=[       "open bracket char
+set statusline+=%n      "buffer number
+set statusline+=%M      "modifiable/modified flag
+set statusline+=%R      "Readonly flag
+set statusline+=%W      "Preview window flag
+set statusline+=]%*     "close bracket & reset color
+set statusline+=%<      "cut from here if line is too long
+set statusline+=./%f    "relative path of the filename
+set statusline+=\ [
+set statusline+=%{&ff}\| "file format
+set statusline+=%{strlen(&ft)?&ft:'NA'} "file type
+set statusline+=]
+set statusline+=%=      "left/right separator
+set statusline+=%c,     "cursor column
+set statusline+=%l/%L   "cursor line/total lines
+set statusline+=\ (%P)  "escaped space, percent through file

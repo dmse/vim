@@ -8,12 +8,19 @@ my vim set up
 
 * git clone https://github.com/dmse/vim.git
 
+---
+**vundle way**
 
+1. git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+2. Launch `vim` and run `:PluginInstall`
+3. To install from command line: `vim +PluginInstall +qall`
+
+---
+**pathogen way (removed)**
 ---
 **create symlinks:**
 
 * ln -s ~/.vim/vimrc ~/.vimrc
-
 
 ---
 **remove symlinks:**

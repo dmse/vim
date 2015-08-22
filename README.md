@@ -1,12 +1,12 @@
 vim
 ===
 
-my vim set up
+my vim set up.
 
 ---
 **installation:**
 
-* git clone https://github.com/dmse/vim.git
+    git clone https://github.com/dmse/vim.git ~/.vim
 
 ---
 **vundle way**
@@ -17,30 +17,25 @@ my vim set up
 
 ---
 **pathogen way (removed)**
----
+
 **create symlinks:**
 
-* ln -s ~/.vim/vimrc ~/.vimrc
+    ln -s ~/.vim/vimrc ~/.vimrc
 
----
 **remove symlinks:**
 
-* unlink ~/.vimrc
+    unlink ~/.vimrc
 
-
----
 **fetch submodules:**
 
-* cd ~/.vim/bundle
+    cd ~/.vim/bundle
+    git submodule init
+    git submodule update
 
-* git submodule init
+or roll into one when installing on a different machine:
 
-* git submodule update
+    git submodule update --init
 
-or roll into one when installing on a different machine
+upgrading all bundle plugins:
 
-* git submodule update --init
-
-upgrading all bundle plugins
-
-* git submodule foreach git pull origin master
+    git submodule foreach git pull origin master

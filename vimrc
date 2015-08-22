@@ -106,18 +106,18 @@ set statusline+=\ (%P)  "escaped space, percent through file
 
 " CtrlP
 " default ignores
-let g:ctrlp_custom_ignore = {
-    \ 'dir': '\v[\/](\.(git))$',
-    \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
-    \ }
-nnoremap <leader>p :CtrlP<CR>
-nnoremap <leader>bb :CtrlPBuffer<CR>
+" let g:ctrlp_custom_ignore = {
+"     \ 'dir': '\v[\/](\.(git))$',
+"     \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
+"     \ }
+" nnoremap <leader>p :CtrlP<CR>
+" nnoremap <leader>bb :CtrlPBuffer<CR>
 
 " syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0

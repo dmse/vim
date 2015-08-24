@@ -1,5 +1,4 @@
-vim
-===
+# vim
 
 my vim set up.
 
@@ -9,22 +8,23 @@ my vim set up.
     git clone https://github.com/dmse/vim.git ~/.vim
 
 ---
-**vundle way**
+### the vundle way
 
 1. git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 2. Launch `vim` and run `:PluginInstall`
 3. To install from command line: `vim +PluginInstall +qall`
+4. Create a symlink of .vimrc to vimrc in .vim
 
----
-**pathogen way (removed)**
-
-**create symlinks:**
+create symlinks:
 
     ln -s ~/.vim/vimrc ~/.vimrc
-
-**remove symlinks:**
+    
+remove symlinks:
 
     unlink ~/.vimrc
+
+---
+### the pathogen way (removed)
 
 **fetch submodules:**
 

@@ -15,11 +15,13 @@ my vim set up.
 3. To install from command line: `vim +PluginInstall +qall`
 4. Create a symlink of .vimrc to vimrc in .vim
 
-create symlinks:
+**symlinks:**
+
+create:
 
     ln -s ~/.vim/vimrc ~/.vimrc
-    
-remove symlinks:
+
+remove:
 
     unlink ~/.vimrc
 

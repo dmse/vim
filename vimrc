@@ -32,7 +32,7 @@ syntax on
 
 set background=dark
 let g:solarized_termcolors=256
-colorscheme papercolor
+colorscheme PaperColor
 
 autocmd FileType html setl sw=2 sts=2 et
 autocmd FileType ruby setl sw=2 sts=2 et
@@ -71,6 +71,8 @@ set number
 set ruler
 
 let mapleader = " "
+nnoremap <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " buffer navigation
 set hidden
@@ -104,20 +106,25 @@ set statusline+=%c,     "cursor column
 set statusline+=%l/%L   "cursor line/total lines
 set statusline+=\ (%P)  "escaped space, percent through file
 
-" CtrlP
+" CtrlP, set config when using CtrlP
 " default ignores
-" let g:ctrlp_custom_ignore = {
-"     \ 'dir': '\v[\/](\.(git))$',
-"     \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
-"     \ }
-" nnoremap <leader>p :CtrlP<CR>
-" nnoremap <leader>bb :CtrlPBuffer<CR>
+if exists('g:ctrlp_cmd')
+    let g:ctrlp_custom_ignore = {
+                \ 'dir': '\v[\/](\.(git))$',
+                \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
+                \ }
+    nnoremap <leader>p :CtrlP<CR>
+    nnoremap <leader>bb :CtrlPBuffer<CR>
+endif
 
-" syntastic
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
+" syntastic< set config when using syntastic
+if exists(':SyntasticInfo')
+    set statusline+=%* " reset colour
+    set statusline+=%#warningmsg#
+    set statusline+=%{SyntasticStatuslineFlag()}
+    set statusline+=%*
+    let g:syntastic_always_populate_loc_list = 1
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_check_on_open = 1
+    let g:syntastic_check_on_wq = 0
+endif

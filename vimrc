@@ -87,29 +87,27 @@ nnoremap <C-n> :tabnew<CR>
 
 " see: :help 'statusline
 " statusline mod
-set statusline=         "reset
-set statusline+=%#todo# "set color
-set statusline+=[       "open bracket char
-set statusline+=%n      "buffer number
-set statusline+=%M      "modifiable/modified flag
-set statusline+=%R      "Readonly flag
-set statusline+=%W      "Preview window flag
-set statusline+=]%*     "close bracket & reset color
-set statusline+=%<      "cut from here if line is too long
-" set statusline+=./%f  "relative path of the filename
-set statusline+=\ %<\%F "full path of the filename and truncate
-set statusline+=\ [     "open bracket char
-set statusline+=%{&ff}\| "file format
-set statusline+=%{strlen(&ft)?&ft:'NA'} "file type
-set statusline+=]       "close bracket
-set statusline+=%=      "left/right separator
-set statusline+=%c,     "cursor column
-set statusline+=%l/%L   "cursor line/total lines
-set statusline+=\ (%P)  "escaped space, percent through file
+set statusline=         " reset
+set statusline+=%#todo# " set colour
+set statusline+=[       " open bracket
+set statusline+=%n      " buffer number
+set statusline+=%M      " modifiable/modified flag
+set statusline+=%R      " Readonly flag
+set statusline+=%W      " Preview window flag
+set statusline+=]%*     " close bracket, reset colour
+set statusline+=\ %<%.99F\  " space, truncate, min width, full path of the filename, space
+set statusline+=[       " open bracket
+set statusline+=%{&ff}\| " file format, pipe
+set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
+set statusline+=]       " close bracket
+set statusline+=%=      " left/right separator
+set statusline+=%c,     " cursor column
+set statusline+=%l/%L   " cursor line/total lines
+set statusline+=\ (%P)  " space, percent through file
 
 " CtrlP, set config when using CtrlP
 " default ignores
-if exists('g:ctrlp_cmd')
+if exists('g:loaded_ctrlp')
     let g:ctrlp_custom_ignore = {
                 \ 'dir': '\v[\/](\.(git))$',
                 \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
@@ -119,7 +117,7 @@ if exists('g:ctrlp_cmd')
 endif
 
 " syntastic< set config when using syntastic
-if exists(':SyntasticInfo')
+if exists('g:loaded_syntastic_plugin')
     set statusline+=%* " reset colour
     set statusline+=%#warningmsg#
     set statusline+=%{SyntasticStatuslineFlag()}

@@ -33,8 +33,6 @@ syntax on
 " 256 colours
 set t_Co=256
 set background=dark
-" fallback default colour
-colorscheme evening
 let g:solarized_termcolors=256
 " load prefered colour, skip error
 silent! colorscheme PaperColor

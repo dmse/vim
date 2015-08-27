@@ -30,9 +30,14 @@ filetype plugin indent on " required
 
 syntax on
 
+" 256 colours
+set t_Co=256
 set background=dark
+" fallback default colour
+colorscheme evening
 let g:solarized_termcolors=256
-colorscheme PaperColor
+" load prefered colour, skip error
+silent! colorscheme PaperColor
 
 autocmd FileType html setl sw=2 sts=2 et
 autocmd FileType ruby setl sw=2 sts=2 et
@@ -51,9 +56,9 @@ set smartindent
 set showmatch
 set wildmenu
 set wildmode=list:longest
-set history=1000
+set history=100
 set title
-set scrolloff=3
+set scrolloff=9
 " always shows the status line
 set ls=2
 
@@ -70,7 +75,14 @@ set noswapfile
 set number
 set ruler
 
-let mapleader = " "
+" quick esc in insert mode
+inoremap jk <ESC>
+
+" improve up/down movement on wrapped lines
+nnoremap j gj
+nnoremap k gk
+
+let mapleader = "\<space>"
 nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
@@ -78,12 +90,20 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 set hidden
 nnoremap <leader>h :bp<CR>
 nnoremap <leader>j :bn<CR>
-nnoremap <leader>bl :ls<CR>
+" list buffer and goto#/delete#
+nnoremap <leader>bl :ls<CR>:b<space>
+nnoremap <leader>bd :ls<CR>:bd<space>
+
+" window/split navigation
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
 " tab navigation
-nnoremap <C-h> :tabprev<CR>
-nnoremap <C-j> :tabnext<CR>
-nnoremap <C-n> :tabnew<CR>
+" nnoremap <C-h> :tabprev<CR>
+" nnoremap <C-j> :tabnext<CR>
+" nnoremap <C-n> :tabnew<CR>
 
 " see: :help 'statusline
 " statusline mod
@@ -105,25 +125,20 @@ set statusline+=%c,     " cursor column
 set statusline+=%l/%L   " cursor line/total lines
 set statusline+=\ (%P)  " space, percent through file
 
-" CtrlP, set config when using CtrlP
-" default ignores
-if exists('g:loaded_ctrlp')
-    let g:ctrlp_custom_ignore = {
-                \ 'dir': '\v[\/](\.(git))$',
-                \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
-                \ }
-    nnoremap <leader>p :CtrlP<CR>
-    nnoremap <leader>bb :CtrlPBuffer<CR>
-endif
+" CtrlP
+let g:ctrlp_working_path_mode = 'w'
+let g:ctrlp_custom_ignore = {
+            \ 'dir': '\v[\/](\.(git))$',
+            \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
+            \ }
+nnoremap <leader>ff :CtrlP<CR>
+nnoremap <leader>fb :CtrlPBuffer<CR>
 
-" syntastic< set config when using syntastic
-if exists('g:loaded_syntastic_plugin')
-    set statusline+=%* " reset colour
-    set statusline+=%#warningmsg#
-    set statusline+=%{SyntasticStatuslineFlag()}
-    set statusline+=%*
-    let g:syntastic_always_populate_loc_list = 1
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_check_on_open = 1
-    let g:syntastic_check_on_wq = 0
-endif
+" syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0

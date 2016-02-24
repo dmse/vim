@@ -11,8 +11,9 @@ Plugin 'altercation/vim-colors-solarized'
 Plugin 'NLKNguyen/papercolor-theme'
 " plugins
 Plugin 'tpope/vim-commentary'
+Plugin 'tpope/vim-surround'
 Plugin 'jiangmiao/auto-pairs'
-" Plugin 'kien/ctrlp.vim'
+Plugin 'kien/ctrlp.vim'
 " Plugin 'scrooloose/syntastic'
 " Plugin 'ap/vim-buftabline'
 " All of your Plugins must be added before the following line
@@ -28,7 +29,17 @@ filetype plugin indent on " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+" windows/linux difference
+let s:running_windows = has('win16') || has('win32') || has('win64')
+
 syntax on
+
+au FileType html setl sw=2 sts=2 ts=2 et
+au FileType ruby setl sw=2 sts=2 ts=2 et
+au FileType eruby setl sw=2 sts=2 ts=2 et
+
+nnoremap ' `
+nnoremap ` '
 
 " 256 colours
 set t_Co=256
@@ -37,8 +48,16 @@ let g:solarized_termcolors=256
 " load prefered colour, skip error
 silent! colorscheme PaperColor
 
-autocmd FileType html setl sw=2 sts=2 et
-autocmd FileType ruby setl sw=2 sts=2 et
+if has("gui_running") && s:running_windows
+    " remove extra gui elements
+    set guioptions=
+    " T:toolbar, m: menu, r: righthand scroll bar
+    " set guioptions-=T
+    " set guioptions-=m
+    " set guifont=Consolas:h9
+    set guifont=Bitstream\ Vera\ Sans\ Mono:h9
+    set lines=50 columns=150
+endif
 
 " dynmically as the as typed
 set hlsearch
@@ -133,10 +152,23 @@ nnoremap <leader>ff :CtrlP<CR>
 nnoremap <leader>fb :CtrlPBuffer<CR>
 
 " syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 1
+" let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+
+" switch javascript on
+let g:my_file_type = 0
+function! ToggleFileType()
+    if g:my_file_type == 0
+        setlocal ft=javascript
+        let g:my_file_type = 1
+    else
+        filetype detect
+        let g:my_file_type = 0
+    endif
+endfunction
+nmap <silent> ;s :call ToggleFileType()<CR>

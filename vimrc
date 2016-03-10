@@ -1,8 +1,20 @@
 set nocompatible
 
-filetype off " required
+filetype off " required for vundle
+" Vundle
+" https://github.com/gmarik/Vundle.vim
+"   To intall on a new machine:
+"   git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
+"   Launch vim and run :PluginInstall
+"   To install from command line: vim +PluginInstall +qall
+"   To update plugins, run :BundleInstall!
+"   If you remove a plugin from your vimrc, run :BundleClean to remove the old plugin.
+"
+" set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
+"
+" Run :BundleInstall after changing this list
 " let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
 " plugin on GitHub repo, author/plugin
@@ -12,20 +24,15 @@ Plugin 'NLKNguyen/papercolor-theme'
 " plugins
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-surround'
+" Plugin 'tpope/vim-fugitive'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'kien/ctrlp.vim'
 " Plugin 'scrooloose/syntastic'
 " Plugin 'ap/vim-buftabline'
+" Plugin 'elixir-lang/vim-elixir'
 " All of your Plugins must be added before the following line
 call vundle#end() " required
 filetype plugin indent on " required
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
@@ -54,12 +61,11 @@ if has("gui_running") && s:running_windows
     " T:toolbar, m: menu, r: righthand scroll bar
     " set guioptions-=T
     " set guioptions-=m
-    " set guifont=Consolas:h9
-    set guifont=Bitstream\ Vera\ Sans\ Mono:h9
+    set guifont=Bitstream\ Vera\ Sans\ Mono:h10,Consolas:h9
     set lines=50 columns=150
 endif
 
-" dynmically as the as typed
+" highlight search & dynmically as the as typed
 set hlsearch
 set incsearch
 " ignore case when searching, except when using capital letters
@@ -104,6 +110,7 @@ nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " buffer navigation
+" allow buffers to be hidden if you've modified it.
 set hidden
 nnoremap <leader>h :bp<CR>
 nnoremap <leader>j :bn<CR>
@@ -159,6 +166,10 @@ nnoremap <leader>fb :CtrlPBuffer<CR>
 " let g:syntastic_auto_loc_list = 1
 " let g:syntastic_check_on_open = 1
 " let g:syntastic_check_on_wq = 0
+
+" vim-buftabline
+" let g:buftabline_numbers = 1
+" let g:buftabline_separators = 1
 
 " switch javascript on
 let g:my_file_type = 0

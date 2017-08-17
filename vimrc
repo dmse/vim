@@ -24,12 +24,13 @@ Plugin 'NLKNguyen/papercolor-theme'
 " plugins
 Plugin 'tpope/vim-commentary'
 Plugin 'tpope/vim-surround'
+" Plugin 'tpope/vim-vinegar'
 " Plugin 'tpope/vim-fugitive'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'kien/ctrlp.vim'
 " Plugin 'scrooloose/syntastic'
-" Plugin 'ap/vim-buftabline'
-" Plugin 'elixir-lang/vim-elixir'
+Plugin 'ap/vim-buftabline'
+Plugin 'elixir-lang/vim-elixir'
 " All of your Plugins must be added before the following line
 call vundle#end() " required
 filetype plugin indent on " required
@@ -112,8 +113,8 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " buffer navigation
 " allow buffers to be hidden if you've modified it.
 set hidden
-nnoremap <leader>h :bp<CR>
-nnoremap <leader>j :bn<CR>
+nnoremap <leader>j :bp<CR>
+nnoremap <leader>k :bn<CR>
 " list buffer and goto#/delete#
 nnoremap <leader>bl :ls<CR>:b<space>
 nnoremap <leader>bd :ls<CR>:bd<space>
@@ -168,8 +169,8 @@ nnoremap <leader>fb :CtrlPBuffer<CR>
 " let g:syntastic_check_on_wq = 0
 
 " vim-buftabline
-" let g:buftabline_numbers = 1
-" let g:buftabline_separators = 1
+let g:buftabline_numbers = 1
+let g:buftabline_separators = 1
 
 " switch javascript on
 let g:my_file_type = 0

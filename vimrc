@@ -1,50 +1,53 @@
 set nocompatible
 
-filetype off " required for vundle
-" Vundle
-" https://github.com/gmarik/Vundle.vim
-"   To intall on a new machine:
-"   git clone https://github.com/gmarik/Vundle.vim.git ~/.vim/bundle/Vundle.vim
-"   Launch vim and run :PluginInstall
-"   To install from command line: vim +PluginInstall +qall
-"   To update plugins, run :BundleInstall!
-"   If you remove a plugin from your vimrc, run :BundleClean to remove the old plugin.
-"
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-"
-" Run :BundleInstall after changing this list
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-" plugin on GitHub repo, author/plugin
-" colors
-Plugin 'altercation/vim-colors-solarized'
-Plugin 'NLKNguyen/papercolor-theme'
-" plugins
-Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-surround'
-" Plugin 'tpope/vim-vinegar'
-" Plugin 'tpope/vim-fugitive'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'kien/ctrlp.vim'
-" Plugin 'scrooloose/syntastic'
-Plugin 'ap/vim-buftabline'
-Plugin 'elixir-lang/vim-elixir'
-" All of your Plugins must be added before the following line
-call vundle#end() " required
-filetype plugin indent on " required
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line
-
 " windows/linux difference
-let s:running_windows = has('win16') || has('win32') || has('win64')
+let s:running_windows = has('win32') || has('win64')
 
+" test for vim and neovim coexistence
+if has('nvim') && s:running_windows
+    " echom 'nvim/nvim-qt win'
+    let s:editor_root=expand("~/AppData/Local/nvim")
+elseif has('nvim') && !s:running_windows
+    " echom 'nvim/nvim-qt non-win'
+    " use below if its not win
+    let s:editor_root=expand("~/.config/nvim")
+else
+    " echom 'vim'
+    let s:editor_root=expand("~/.vim")
+endif
+
+
+" vim-plug
+call plug#begin(s:editor_root . "/plugged")
+" colours
+Plug 'altercation/vim-colors-solarized'
+Plug 'NLKNguyen/papercolor-theme'
+" plugins
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+" Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-fugitive'
+Plug 'jiangmiao/auto-pairs'
+Plug 'ap/vim-buftabline'
+Plug 'kien/ctrlp.vim'
+" Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
+" lang
+Plug 'elixir-lang/vim-elixir'
+Plug 'vim-ruby/vim-ruby'
+call plug#end()
+
+
+filetype plugin indent on
 syntax on
 
-au FileType html setl sw=2 sts=2 ts=2 et
-au FileType ruby setl sw=2 sts=2 ts=2 et
-au FileType eruby setl sw=2 sts=2 ts=2 et
+augroup FTOpts
+    autocmd!
+    au FileType vim         setl sw=4 sts=4 ts=4 et
+    au FileType ruby,eruby  setl sw=2 sts=2 ts=2 et
+    au FileType python      setl sw=4 sts=4 ts=4 et
+    " au FileType html      setl sw=2 sts=2 ts=2 et
+augroup END
 
 nnoremap ' `
 nnoremap ` '
@@ -52,9 +55,7 @@ nnoremap ` '
 " 256 colours
 set t_Co=256
 set background=dark
-let g:solarized_termcolors=256
-" load prefered colour, skip error
-silent! colorscheme PaperColor
+silent! colorscheme PaperColor  " load prefered colour, skip error
 
 if has("gui_running") && s:running_windows
     " remove extra gui elements
@@ -62,42 +63,50 @@ if has("gui_running") && s:running_windows
     " T:toolbar, m: menu, r: righthand scroll bar
     " set guioptions-=T
     " set guioptions-=m
-    set guifont=Bitstream\ Vera\ Sans\ Mono:h10,Consolas:h9
+    set guifont=Bitstream\ Vera\ Sans\ Mono:h9,Consolas:h9
+    " set guifont=Ubuntu\ Mono:h11,Consolas:h9
     set lines=50 columns=150
 endif
 
-" highlight search & dynmically as the as typed
-set hlsearch
-set incsearch
-" ignore case when searching, except when using capital letters
-set ignorecase 
+if v:version > 703 || v:version == 703 && has('patch541')
+    set formatoptions+=j    " remove comment leader when joining comment lines
+endif
+
+set cul         " highlight the current line
+set hlsearch    " highlight search
+set incsearch   " move to search dynamically as typed
+set ignorecase  " ignore case when searching, except when using capital letters
 set smartcase
-" Intuitive backspacing in insert mode
-set backspace=indent,eol,start
-set autoindent
-set smartindent
-" cursor shows matching ")" and "}"
-set showmatch
+set backspace=indent,eol,start  " Intuitive backspacing in insert mode
+set autoindent  " copy indent from current line when starting a new line
+set smartindent " auto indent when starting a new line
+set showmatch   " cursor shows matching ")" and "}"
 set wildmenu
 set wildmode=list:longest
 set history=100
 set title
-set scrolloff=9
-" always shows the status line
-set ls=2
+set scrolloff=9 " always show 9 lines above or below cursor
+set ls=2        " always shows the status line
 
-" all tab characters entered will turn to spaces
-set expandtab
-" numbers of spaces to (auto)indent
-set shiftwidth=4
-" numbers of spaces of tab character
-set tabstop=4
+set expandtab       " all tab characters entered will turn to spaces
+set shiftwidth=2    " numbers of spaces to (auto)indent
+set tabstop=2       " numbers of spaces of tab character
 
 set nobackup
 set nowritebackup
 set noswapfile
-set number
+set number          " show number
+set relativenumber  " display relative numbers relative to the cursor line
 set ruler
+
+set linebreak           " wrap long lines at characters in 'breakat'
+if has('linebreak')
+    let &showbreak=' '  " display a leading space when line is wrapped
+endif
+
+" mouse setting
+behave xterm
+set mouse=a
 
 " quick esc in insert mode
 inoremap jk <ESC>
@@ -111,38 +120,48 @@ nnoremap <leader>ev :vsplit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " buffer navigation
-" allow buffers to be hidden if you've modified it.
-set hidden
+set hidden  " allows you to hide buffers with unsaved changes
 nnoremap <leader>j :bp<CR>
 nnoremap <leader>k :bn<CR>
 " list buffer and goto#/delete#
 nnoremap <leader>bl :ls<CR>:b<space>
 nnoremap <leader>bd :ls<CR>:bd<space>
 
-" window/split navigation
+" window navigation
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" loclist navigation
+nnoremap <leader>lp :lprevious<CR>
+nnoremap <leader>ln :lnext<CR>
+nnoremap <leader>lr :lrewind<CR>
 
 " tab navigation
 " nnoremap <C-h> :tabprev<CR>
 " nnoremap <C-j> :tabnext<CR>
 " nnoremap <C-n> :tabnew<CR>
 
-" see: :help 'statusline
 " statusline mod
+" see :help 'statusline
 set statusline=         " reset
-set statusline+=%#todo# " set colour
+set statusline+=%#todo# " set colour to #todo#
 set statusline+=[       " open bracket
 set statusline+=%n      " buffer number
 set statusline+=%M      " modifiable/modified flag
 set statusline+=%R      " Readonly flag
 set statusline+=%W      " Preview window flag
 set statusline+=]%*     " close bracket, reset colour
+" Linter in statusline
+set statusline+=%#warningmsg#
+set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?'['.LinterStatus().']':''}
+set statusline+=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
+set statusline+=%*
+" Linter in statusline
 set statusline+=\ %<%.99F\  " space, truncate, min width, full path of the filename, space
-set statusline+=[       " open bracket
-set statusline+=%{&ff}\| " file format, pipe
+set statusline+=[           " open bracket
+set statusline+=%{&ff}\|    " file format, pipe
 set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
 set statusline+=]       " close bracket
 set statusline+=%=      " left/right separator
@@ -150,27 +169,50 @@ set statusline+=%c,     " cursor column
 set statusline+=%l/%L   " cursor line/total lines
 set statusline+=\ (%P)  " space, percent through file
 
-" CtrlP
-let g:ctrlp_working_path_mode = 'w'
-let g:ctrlp_custom_ignore = {
-            \ 'dir': '\v[\/](\.(git))$',
-            \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg|mp4|mp3)$',
-            \ }
-nnoremap <leader>ff :CtrlP<CR>
-nnoremap <leader>fb :CtrlPBuffer<CR>
-
-" syntastic
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
-" let g:syntastic_always_populate_loc_list = 1
-" let g:syntastic_auto_loc_list = 1
-" let g:syntastic_check_on_open = 1
-" let g:syntastic_check_on_wq = 0
 
 " vim-buftabline
 let g:buftabline_numbers = 1
 let g:buftabline_separators = 1
+
+" CtrlP
+let g:ctrlp_working_path_mode = ''  " disble local working directory
+nnoremap <leader>ff :CtrlP<cr>
+nnoremap <leader>fb :CtrlPBuffer<cr>
+
+" ale (async linting)
+" let g:ale_lint_on_enter = 0               " 1
+" let g:ale_lint_on_save = 0                " 0, set 1 when lint_on_text_changed is normal|never(off)
+" let g:ale_lint_on_text_changed = 'never'  " always, insert, normal|never(off)
+" let g:ale_lint_delay = 200                " 200, enable to save CPU/Battery usage
+" let g:ale_open_list = 1                   " 0|'on_save'
+" let g:ale_set_loclist = 1                 " 1, use loclist instead of quickfix
+" let g:ale_set_quickfix = 1                " 0, use quickfix instead of loclist
+" let g:ale_list_window_size = 5            " 10, use with loclist|quickfix
+let g:ale_sign_error = '>>'                 " >>
+let g:ale_sign_warning = '--'               " --
+let g:ale_echo_msg_error_str = g:ale_sign_error " use sign instead of str
+let g:ale_echo_msg_warning_str = g:ale_sign_warning
+let g:ale_echo_msg_format = '%linter%|%severity% %s'
+function! LinterStatus() abort
+    if exists('g:loaded_ale') && g:loaded_ale
+        let l:counts = ale#statusline#Count(bufnr(''))
+        let l:all_errors = l:counts.error + l:counts.style_error
+        let l:all_non_errors = l:counts.total - l:all_errors
+        return l:counts.total == 0 ? 'OK' : printf(
+                    \   '%dW %dE',
+                    \   all_non_errors,
+                    \   all_errors
+                    \)
+    endif
+endfunction
+
+" syntastic
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_loc_list_height = 5
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+" let g:syntastic_check_on_wq = 0
+
 
 " switch javascript on
 let g:my_file_type = 0
@@ -184,3 +226,14 @@ function! ToggleFileType()
     endif
 endfunction
 nmap <silent> ;s :call ToggleFileType()<CR>
+
+
+" adopt ruby environment, windows
+if s:running_windows
+  let s:pik_ruby_info = system('pik info')
+  if len(s:pik_ruby_info) > 0
+    let s:pik_ruby_version = matchlist(s:pik_ruby_info, 'version: *"\([^"]\+\)*"')[1]
+    let s:pik_ruby_dir = matchlist(s:pik_ruby_info, 'binaries:\nruby: *"\([^"]\+\)*"')[1].'\'
+    let g:ruby_default_path = [s:pik_ruby_dir]  " accepts a list!
+  endif
+endif

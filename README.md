@@ -9,16 +9,22 @@ my vim set up.
 
 ---
 ### the plug way
-1. run this command:
+run this command:
 
-    `curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim`
+    curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
-2. create ./config/nvim/init.vim and put the following inside:
-`
+or this if we want to follow the official guide:
+    
+    curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+create `./config/nvim/init.vim` and put the following inside if it is neovim:
+
     set runtimepath^=~/.vim runtimepath+=~/.vim/after
     let &packpath = &runtimepath
     source ~/.vimrc
-`
+
 
 ---
 ### the vundle way (removed)

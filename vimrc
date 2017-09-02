@@ -2,6 +2,7 @@ set nocompatible
 
 " windows/linux difference
 let s:running_windows = has('win32') || has('win64')
+let s:running_unix = has('unix')
 
 " test for vim and neovim coexistence
 if has('nvim') && s:running_windows
@@ -163,6 +164,7 @@ set statusline+=\ %<%.99F\  " space, truncate, min width, full path of the filen
 set statusline+=[           " open bracket
 set statusline+=%{&ff}\|    " file format, pipe
 set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
+set statusline+=%{&ft=='ruby'?'-'.g:ruby_version:''}    " ruby version
 set statusline+=]       " close bracket
 set statusline+=%=      " left/right separator
 set statusline+=%c,     " cursor column
@@ -230,10 +232,25 @@ nmap <silent> ;s :call ToggleFileType()<CR>
 
 " adopt ruby environment, windows
 if s:running_windows
-  let s:pik_ruby_info = system('pik info')
-  if len(s:pik_ruby_info) > 0
-    let s:pik_ruby_version = matchlist(s:pik_ruby_info, 'version: *"\([^"]\+\)*"')[1]
-    let s:pik_ruby_dir = matchlist(s:pik_ruby_info, 'binaries:\nruby: *"\([^"]\+\)*"')[1].'\'
-    let g:ruby_default_path = [s:pik_ruby_dir]  " accepts a list!
-  endif
+    let s:pik_ruby_info = system('pik info')
+    if len(s:pik_ruby_info) > 0
+        let s:pik_ruby_version = matchlist(s:pik_ruby_info, 'version: *"\([^"]\+\)*"')[1]
+        let s:pik_ruby_dir = matchlist(s:pik_ruby_info, 'binaries:\nruby: *"\([^"]\+\)*"')[1].'\'
+        let g:ruby_default_path = [s:pik_ruby_dir]  " accepts a list!
+    endif
 endif
+
+if s:running_unix
+    " uses rbenv
+    let s:this_ruby_info = system('rbenv version')
+    if len(s:this_ruby_info) > 0
+        " let g:ruby_version = matchstr(s:this_ruby_info, '\(.\{-}\s\)') " this includes the space character
+        let g:ruby_version = matchstr(s:this_ruby_info, '\d*.\d*.\d*')
+    endif
+endif
+
+
+" prettyprint JSON in buffer
+function! Ppjson()
+    %!python -m json.tool
+endfunction

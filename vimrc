@@ -46,7 +46,7 @@ augroup FTOpts
     autocmd!
     au FileType vim         setl sw=4 sts=4 ts=4 et
     au FileType ruby,eruby  setl sw=2 sts=2 ts=2 et
-    au FileType python      setl sw=4 sts=4 ts=4 et
+    au FileType python      setl sw=4 sts=4 ts=8 et
     " au FileType html      setl sw=2 sts=2 ts=2 et
 augroup END
 
@@ -242,10 +242,14 @@ endif
 
 if s:running_unix
     " uses rbenv
-    let s:this_ruby_info = system('rbenv version')
-    if len(s:this_ruby_info) > 0
-        " let g:ruby_version = matchstr(s:this_ruby_info, '\(.\{-}\s\)') " this includes the space character
-        let g:ruby_version = matchstr(s:this_ruby_info, '\d*.\d*.\d*')
+    if len(system('which rbenv')) > 0
+        let s:this_ruby_info = system('rbenv version')
+        if len(s:this_ruby_info) > 0
+            " let g:ruby_version = matchstr(s:this_ruby_info, '\(.\{-}\s\)') " this includes the space character
+            let g:ruby_version = matchstr(s:this_ruby_info, '\d*.\d*.\d*')
+        endif
+    else
+        let g:ruby_version = 'NOTFOUND'
     endif
 endif
 

@@ -11,6 +11,21 @@ my vim set up.
 ### the plug way
 run this command:
 
+For Vim8:
+
+**Unix**
+
+    curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+
+**Windows**
+
+Place `plug.vim` in `C:\Users\<user>\vimfiles\autoload\` and install **gitforwindows** for **Plug** to function properly.
+
+For NeoVim:
+
+**Unix**
+
     curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs \
     https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 

@@ -285,9 +285,9 @@ let g:netrw_liststyle = 3 " Can cycle through `i`
 let g:netrw_browse_split = 2
 " Set width of the explorer
 let g:netrw_winsize = 25
-" Open explorer, focus on the right panel
-augroup netrwExplorer
-    autocmd!
-    au VimEnter * :Vexplore
-    au VimEnter * wincmd l
-augroup END
+" Enable the folllow for always on Explorer
+" augroup netrwExplorer
+"     autocmd!
+"     au VimEnter * :Vexplore!    " ! place explorer on the right
+"     au VimEnter * wincmd h      " focus, h or l depends on above
+" augroup END

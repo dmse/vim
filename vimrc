@@ -26,11 +26,12 @@ Plug 'NLKNguyen/papercolor-theme'
 " plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-" Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-vinegar'
 " Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 Plug 'ap/vim-buftabline'
 Plug 'kien/ctrlp.vim'
+Plug 'airblade/vim-gitgutter'
 " Plug 'scrooloose/syntastic'
 Plug 'w0rp/ale'
 " lang
@@ -272,3 +273,19 @@ endif
 function! Ppjson()
     %!python -m json.tool
 endfunction
+
+
+" NETRW Explorer
+let g:netrw_liststyle = 3
+" Controls how files will be opened;
+" 1: horizontal split
+" 2: vertial split
+" 3: new tab
+" 4: previous window
+let g:netrw_browse_split = 2
+" Set width of the directory explorer
+let g:netrw_winsize = 25
+augroup ProjectDrawer
+    autocmd!
+    autocmd VimEnter * :Vexplore
+augroup END

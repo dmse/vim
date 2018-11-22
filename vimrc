@@ -232,11 +232,25 @@ nmap <silent> ;s :call ToggleFileType()<CR>
 
 " adopt ruby environment, windows
 if s:running_windows
-    let s:pik_ruby_info = system('pik info')
-    if len(s:pik_ruby_info) > 0
-        let s:pik_ruby_version = matchlist(s:pik_ruby_info, 'version: *"\([^"]\+\)*"')[1]
-        let s:pik_ruby_dir = matchlist(s:pik_ruby_info, 'binaries:\nruby: *"\([^"]\+\)*"')[1].'\'
-        let g:ruby_default_path = [s:pik_ruby_dir]  " accepts a list!
+    " pik
+    " let s:pik_ruby_info = system('pik info')
+    " if len(s:pik_ruby_info) > 0
+    "     let s:pik_ruby_version = matchlist(s:pik_ruby_info, 'version: *"\([^"]\+\)*"')[1]
+    "     let s:pik_ruby_dir = matchlist(s:pik_ruby_info, 'binaries:\nruby: *"\([^"]\+\)*"')[1].'\'
+    "     let g:ruby_default_path = [s:pik_ruby_dir]  " accepts a list!
+    " endif
+
+    " uru
+    let s:uru_ruby_ls = system('uru ls --verbose')
+    if len(s:uru_ruby_ls) > 0
+        let s:uru_ruby_info = matchstr(s:uru_ruby_ls, '=>\(.\{-}\n\)\{3}')
+        " begin match with =>
+        " then group \( anything . as little as possible \{-} until newline \n \) 
+        " stops at match count \{3}
+        let s:uru_ruby = split(s:uru_ruby_info,'\n')
+        let s:uru_ruby_dir = substitute(s:uru_ruby[2], ' *Home: ', '', 'g')
+        let g:ruby_version = substitute(s:uru_ruby[1], ' *ID: ', '', 'g')
+        let g:ruby_default_path = [s:uru_ruby_dir]  " accepts a list!
     endif
 endif
 

@@ -275,17 +275,19 @@ function! Ppjson()
 endfunction
 
 
-" NETRW Explorer
-let g:netrw_liststyle = 3
-" Controls how files will be opened;
+" netrw Explorer
+let g:netrw_liststyle = 3 " Can cycle through `i`
+" How files will be opened;
 " 1: horizontal split
 " 2: vertial split
 " 3: new tab
 " 4: previous window
 let g:netrw_browse_split = 2
-" Set width of the directory explorer
+" Set width of the explorer
 let g:netrw_winsize = 25
-augroup ProjectDrawer
+" Open explorer, focus on the right panel
+augroup netrwExplorer
     autocmd!
     au VimEnter * :Vexplore
+    au VimEnter * wincmd l
 augroup END

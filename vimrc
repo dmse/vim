@@ -56,7 +56,7 @@ nnoremap ` '
 
 " 256 colours
 set t_Co=256
-set background=dark
+set background=light
 silent! colorscheme PaperColor  " load prefered colour, skip error
 
 if has("gui_running") && s:running_windows
@@ -148,6 +148,9 @@ nnoremap <leader>lr :lrewind<CR>
 " Esc to exit :term
 tnoremap <Esc> <C-\><C-n>
 
+" GitGutter Navigation
+nnoremap <leader>gp :GitGutterPrevHunk<CR>
+nnoremap <leader>gn :GitGutterNextHunk<CR>
 
 " statusline mod
 " see :help 'statusline
@@ -269,7 +272,7 @@ nnoremap <leader>fb :CtrlPBuffer<cr>
 " ale (async linting)
 " let g:ale_lint_on_enter = 0               " 1
 " let g:ale_lint_on_save = 0                " 0, set 1 when lint_on_text_changed is normal|never(off)
-" let g:ale_lint_on_text_changed = 'never'  " always, insert, normal|never(off)
+let g:ale_lint_on_text_changed = 'normal'  " always, insert, normal|never(off)
 " let g:ale_lint_delay = 200                " 200, enable to save CPU/Battery usage
 " let g:ale_open_list = 1                   " 0|'on_save'
 " let g:ale_set_loclist = 1                 " 1, use loclist instead of quickfix

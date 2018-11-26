@@ -145,6 +145,9 @@ nnoremap <leader>lr :lrewind<CR>
 " nnoremap <C-j> :tabnext<CR>
 " nnoremap <C-n> :tabnew<CR>
 
+" Esc to exit :term
+tnoremap <Esc> <C-\><C-n>
+
 
 " statusline mod
 " see :help 'statusline
@@ -173,7 +176,7 @@ let g:currentmode={
       \ "t"      : "Terminal"
       \ }
 
-function! GitInfo()
+function! GitInfoStatus()
   return exists('g:loaded_fugitive')&&g:loaded_fugitive&&fugitive#head()!=''?fugitive#head():''
 endfunction
 
@@ -188,7 +191,7 @@ function! CurrentMode()
   end
 endfunction
 
-function! PrintMode()
+function! ModeStatus()
   " view mode()
   " return " ".toupper(g:currentmode[mode()])."(".mode().")"." "
   " no mode()
@@ -210,18 +213,17 @@ set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?LinterStatus():''}
 set statusline+=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
 set statusline+=%*
 " Linter in statusline
-set statusline+=\ %<%.99F\  " space, truncate, min width, full path of the filename, space
-set statusline+=[           " open bracket
-set statusline+=%{toupper(&ff)}\|       " file format, pipe
+set statusline+=%#warningmsg#\ %t\ %*   " file name (tail)
+set statusline+=\ %{toupper(&ff)}\|     " file format, pipe
 set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
 set statusline+=%{&ft=='ruby'?'-'.g:ruby_version:''}    " ruby version
-set statusline+=]           " close bracket
-set statusline+=%=          " left/right separator
-set statusline+=\ %{GitInfo()}\  " Git branch name
+set statusline+=\ %<%.99{expand('%:p:h')}\\   " truncate, minwidth, directory containing file ('head'), space
+set statusline+=%=                      " left/right separator
+set statusline+=\ %{GitInfoStatus()}\   " Git branch name
 " mode() indicator
-set statusline+=%{CurrentMode()==0?PrintMode():''}
-set statusline+=%#buftablinecurrent#%{CurrentMode()==1?PrintMode():''}%*
-set statusline+=%#buftablineactive#%{CurrentMode()==2?PrintMode():''}%*
+set statusline+=%{CurrentMode()==0?ModeStatus():''}
+set statusline+=%#buftablinecurrent#%{CurrentMode()==1?ModeStatus():''}%*
+set statusline+=%#buftablineactive#%{CurrentMode()==2?ModeStatus():''}%*
 " mode() indicator
 set statusline+=\ %c,   " cursor column
 set statusline+=%l/%L   " cursor line/total lines
@@ -305,6 +307,23 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 " let g:syntastic_check_on_wq = 0
 
+" netrw Explorer
+let g:netrw_liststyle = 3 " Can cycle through `i`
+" How files will be opened;
+" 1: horizontal split
+" 2: vertial split
+" 3: new tab
+" 4: previous window
+let g:netrw_browse_split = 2
+" Set width of the explorer
+let g:netrw_winsize = 25
+" Enable the folllow for always on Explorer
+" augroup netrwExplorer
+"     autocmd!
+"     au VimEnter * :Vexplore!    " ! place explorer on the right
+"     au VimEnter * wincmd h      " focus, h or l depends on above
+" augroup END
+
 
 " switch javascript on
 let g:my_file_type = 0
@@ -362,21 +381,3 @@ endif
 function! Ppjson()
     %!python -m json.tool
 endfunction
-
-
-" netrw Explorer
-let g:netrw_liststyle = 3 " Can cycle through `i`
-" How files will be opened;
-" 1: horizontal split
-" 2: vertial split
-" 3: new tab
-" 4: previous window
-let g:netrw_browse_split = 2
-" Set width of the explorer
-let g:netrw_winsize = 25
-" Enable the folllow for always on Explorer
-" augroup netrwExplorer
-"     autocmd!
-"     au VimEnter * :Vexplore!    " ! place explorer on the right
-"     au VimEnter * wincmd h      " focus, h or l depends on above
-" augroup END

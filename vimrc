@@ -217,7 +217,7 @@ set statusline+=%#warningmsg#\ %t\ %*   " file name (tail)
 set statusline+=\ %{toupper(&ff)}\|     " file format, pipe
 set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
 set statusline+=%{&ft=='ruby'?'-'.g:ruby_version:''}    " ruby version
-set statusline+=\ %<%.99{expand('%:p:h')}\\   " truncate, minwidth, directory containing file ('head'), space
+set statusline+=\ %<%.99{expand('%:p:h')}%{has('unix')?'\/':'\\'}   " truncate, minwidth, directory containing file ('head'), space
 set statusline+=%=                      " left/right separator
 set statusline+=\ %{GitInfoStatus()}\   " Git branch name
 " mode() indicator

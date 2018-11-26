@@ -145,32 +145,114 @@ nnoremap <leader>lr :lrewind<CR>
 " nnoremap <C-j> :tabnext<CR>
 " nnoremap <C-n> :tabnew<CR>
 
+
 " statusline mod
 " see :help 'statusline
+
+" :h mode() to see all modes
+" global variable mapping for mode()
+let g:currentmode={
+      \ "n"      : "Normal",
+      \ "no"     : "Operator Pending",
+      \ "v"      : "Visual",
+      \ "V"      : "Visual Line",
+      \ "\<c-v>" : "Visual Block",
+      \ "s"      : "Select",
+      \ "S"      : "Select Line",
+      \ "\<c-s>" : "Select Block",
+      \ "i"      : "Insert",
+      \ "R"      : "Replace",
+      \ "Rv"     : "Virtual Replace",
+      \ "c"      : "Command",
+      \ "cv"     : "Vim Ex",
+      \ "ce"     : "Ex",
+      \ "r"      : "Prompt",
+      \ "rm"     : "More",
+      \ "r?"     : "Confirm",
+      \ "!"      : "Shell",
+      \ "t"      : "Terminal"
+      \ }
+
+function! GitInfo()
+  return exists('g:loaded_fugitive')&&g:loaded_fugitive&&fugitive#head()!=''?fugitive#head():''
+endfunction
+
+function! CurrentMode()
+  " 3 highlighting groups
+  if (mode() =~# '\v(n|no)')
+    return 0
+  elseif (mode() =~# '\v(i|R|Rv)')
+    return 1
+  elseif (mode() =~# '\v(v|V)' || mode() == "\<c-v>")
+    return 2
+  end
+endfunction
+
+function! PrintMode()
+  " view mode()
+  " return " ".toupper(g:currentmode[mode()])."(".mode().")"." "
+  " no mode()
+  return " ".toupper(g:currentmode[mode()])." "
+endfunction
+
 set statusline=         " reset
-set statusline+=%#todo# " set colour to #todo#
-set statusline+=[       " open bracket
+set statusline+=%#buftablineactive# " set colour to #todo#
+set statusline+=\       " space
 set statusline+=%n      " buffer number
 set statusline+=%M      " modifiable/modified flag
 set statusline+=%R      " Readonly flag
 set statusline+=%W      " Preview window flag
-set statusline+=]%*     " close bracket, reset colour
-" Linter in statusline
+set statusline+=\       " space
+set statusline+=%*      " reset colour
+" Linter in statusline, only show on error
 set statusline+=%#warningmsg#
-set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?'['.LinterStatus().']':''}
+set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?LinterStatus():''}
 set statusline+=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
 set statusline+=%*
 " Linter in statusline
 set statusline+=\ %<%.99F\  " space, truncate, min width, full path of the filename, space
 set statusline+=[           " open bracket
-set statusline+=%{&ff}\|    " file format, pipe
+set statusline+=%{toupper(&ff)}\|       " file format, pipe
 set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
 set statusline+=%{&ft=='ruby'?'-'.g:ruby_version:''}    " ruby version
-set statusline+=]       " close bracket
-set statusline+=%=      " left/right separator
-set statusline+=%c,     " cursor column
+set statusline+=]           " close bracket
+set statusline+=%=          " left/right separator
+set statusline+=\ %{GitInfo()}\  " Git branch name
+" mode() indicator
+set statusline+=%{CurrentMode()==0?PrintMode():''}
+set statusline+=%#buftablinecurrent#%{CurrentMode()==1?PrintMode():''}%*
+set statusline+=%#buftablineactive#%{CurrentMode()==2?PrintMode():''}%*
+" mode() indicator
+set statusline+=\ %c,   " cursor column
 set statusline+=%l/%L   " cursor line/total lines
-set statusline+=\ (%P)  " space, percent through file
+set statusline+=\ (%P)  " space, percent through file, space
+
+" 20181126
+" set statusline=         " reset
+" set statusline+=%#todo# " set colour to #todo#
+" set statusline+=[       " open bracket
+" set statusline+=%n      " buffer number
+" set statusline+=%M      " modifiable/modified flag
+" set statusline+=%R      " Readonly flag
+" set statusline+=%W      " Preview window flag
+" set statusline+=]%*     " close bracket, reset colour
+" " Linter in statusline
+" set statusline+=%#warningmsg#
+" set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?'['.LinterStatus().']':''}
+" set statusline+=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
+" set statusline+=%*
+" " Linter in statusline
+" set statusline+=\ %<%.99F\  " space, truncate, min width, full path of the filename, space
+" set statusline+=[           " open bracket
+" set statusline+=%{&ff}\|    " file format, pipe
+" set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
+" set statusline+=%{&ft=='ruby'?'-'.g:ruby_version:''}    " ruby version
+" set statusline+=]       " close bracket
+" set statusline+=%=      " left/right separator
+" set statusline+=%c,     " cursor column
+" set statusline+=%l/%L   " cursor line/total lines
+" set statusline+=\ (%P)  " space, percent through file
+" statusline mod
 
 
 " vim-buftabline

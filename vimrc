@@ -26,8 +26,9 @@ Plug 'NLKNguyen/papercolor-theme'
 " plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
-Plug 'tpope/vim-vinegar'
-" Plug 'tpope/vim-fugitive'
+" bprev doesnt work with vinegar!
+" Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-fugitive'
 Plug 'jiangmiao/auto-pairs'
 Plug 'ap/vim-buftabline'
 Plug 'kien/ctrlp.vim'
@@ -65,8 +66,9 @@ if has("gui_running") && s:running_windows
     " T:toolbar, m: menu, r: righthand scroll bar
     " set guioptions-=T
     " set guioptions-=m
-    set guifont=Bitstream\ Vera\ Sans\ Mono:h9,Consolas:h9
+    " set guifont=Bitstream\ Vera\ Sans\ Mono:h9,Consolas:h9
     " set guifont=Ubuntu\ Mono:h11,Consolas:h9
+    set guifont=Menlo:h9,Consolas:h9
     set lines=50 columns=150
 endif
 

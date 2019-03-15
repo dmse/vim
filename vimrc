@@ -270,6 +270,7 @@ let g:buftabline_separators = 1
 let g:ctrlp_working_path_mode = ''  " disble local working directory
 nnoremap <leader>ff :CtrlP<cr>
 nnoremap <leader>fb :CtrlPBuffer<cr>
+nnoremap <leader>fl :CtrlPLine<cr>
 
 " ale (async linting)
 " let g:ale_lint_on_enter = 0               " 1

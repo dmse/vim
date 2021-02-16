@@ -10,7 +10,6 @@ if has('nvim') && s:running_windows
     let s:editor_root=expand("~/AppData/Local/nvim")
 elseif has('nvim') && !s:running_windows
     " echom 'nvim/nvim-qt non-win'
-    " use below if its not win
     let s:editor_root=expand("~/.config/nvim")
 else
     " echom 'vim'
@@ -21,23 +20,27 @@ endif
 " vim-plug
 call plug#begin(s:editor_root . "/plugged")
 " colours
-Plug 'altercation/vim-colors-solarized'
-Plug 'NLKNguyen/papercolor-theme'
-" plugins
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-surround'
-" bprev doesnt work with vinegar!
-" Plug 'tpope/vim-vinegar'
-Plug 'tpope/vim-fugitive'
-Plug 'jiangmiao/auto-pairs'
-Plug 'ap/vim-buftabline'
-Plug 'kien/ctrlp.vim'
-Plug 'airblade/vim-gitgutter'
-" Plug 'scrooloose/syntastic'
-Plug 'w0rp/ale'
+" Plug 'altercation/vim-colors-solarized'
+" Plug 'NLKNguyen/papercolor-theme'
+Plug 'arcticicestudio/nord-vim'
 " lang
 Plug 'elixir-lang/vim-elixir'
 Plug 'vim-ruby/vim-ruby'
+Plug 'vim-python/python-syntax'
+Plug 'rhysd/vim-crystal'
+Plug 'cespare/vim-toml'
+" plugins
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-fugitive'
+Plug 'airblade/vim-gitgutter'
+" Plug 'prettier/vim-prettier', { 'do': 'npm install', 'for': ['javascript','css','less','scss','json','vue','yaml','html','xml'] }
+" "bprev doesnt work with vinegar! maybe netrw too?
+" Plug 'tpope/vim-vinegar'
+" Plug 'jiangmiao/auto-pairs'
+" Plug 'scrooloose/syntastic'
+" Plug 'w0rp/ale'
+" Plug 'justinmk/vim-sneak'
 call plug#end()
 
 
@@ -46,10 +49,10 @@ syntax on
 
 augroup FTOpts
     autocmd!
-    au FileType vim         setl sw=4 sts=4 ts=4 et
-    au FileType ruby,eruby  setl sw=2 sts=2 ts=2 et
-    au FileType python      setl sw=4 sts=4 ts=8 et
-    " au FileType html      setl sw=2 sts=2 ts=2 et
+    au FileType ruby,eruby,html                 setl sw=2 sts=2 ts=2 et
+    au FileType vim,sql,python,java,erlang	setl sw=4 sts=4 ts=8 et
+    au FileType c,cpp                           setl sw=8 sts=8 ts=8 noet
+    au BufNewFile,BufRead *.term                set ft=erlang
 augroup END
 
 nnoremap ' `
@@ -57,8 +60,10 @@ nnoremap ` '
 
 " 256 colours
 set t_Co=256
-set background=light
-silent! colorscheme PaperColor  " load prefered colour, skip error
+" set background=light
+" silent! colorscheme PaperColor  " load prefered colour, skip error
+set background=dark
+silent! colorscheme nord  " load prefered colour, skip error
 
 if has("gui_running") && s:running_windows
     " remove extra gui elements
@@ -66,10 +71,14 @@ if has("gui_running") && s:running_windows
     " T:toolbar, m: menu, r: righthand scroll bar
     " set guioptions-=T
     " set guioptions-=m
-    " set guifont=Bitstream\ Vera\ Sans\ Mono:h9,Consolas:h9
-    " set guifont=Ubuntu\ Mono:h11,Consolas:h9
-    set guifont=Menlo:h9,Consolas:h9
-    set lines=50 columns=150
+    set guifont=JetBrains\ Mono\ NL:h9,Ubuntu\ Mono:h11,Menlo:h9,Consolas:h9
+    " set lines=50 columns=150
+    set lines=61 columns=210    " resolution for a 4k screen
+elseif has("gui_macvim")
+    set guifont=Menlo:h11
+elseif has("gui_running") && has("unix")
+    set guioptions=Tm
+    set guifont=JetBrains\ Mono\ 10,DejaVu\ Sans\ Mono\ 10
 endif
 
 if v:version > 703 || v:version == 703 && has('patch541')
@@ -78,7 +87,7 @@ endif
 
 set cul         " highlight the current line
 set hlsearch    " highlight search
-set incsearch   " move to search dynamically as typed
+" set incsearch   " move to search dynamically as typed
 set ignorecase  " ignore case when searching, except when using capital letters
 set smartcase
 set backspace=indent,eol,start  " Intuitive backspacing in insert mode
@@ -131,6 +140,11 @@ nnoremap <leader>k :bn<CR>
 nnoremap <leader>bl :ls<CR>:b<space>
 nnoremap <leader>bd :ls<CR>:bd<space>
 
+" tab navigation
+" nnoremap <C-h> :tabprev<CR>
+" nnoremap <C-j> :tabnext<CR>
+" nnoremap <C-n> :tabnew<CR>
+
 " window navigation
 nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
@@ -142,17 +156,23 @@ nnoremap <leader>lp :lprevious<CR>
 nnoremap <leader>ln :lnext<CR>
 nnoremap <leader>lr :lrewind<CR>
 
-" tab navigation
-" nnoremap <C-h> :tabprev<CR>
-" nnoremap <C-j> :tabnext<CR>
-" nnoremap <C-n> :tabnew<CR>
-
 " Esc to exit :term
 tnoremap <Esc> <C-\><C-n>
 
 " GitGutter Navigation
 nnoremap <leader>gp :GitGutterPrevHunk<CR>
 nnoremap <leader>gn :GitGutterNextHunk<CR>
+
+inoremap () ()<Left>
+inoremap {} {}<Left>
+inoremap <> <><Left>
+inoremap <<>> <<>><Left><Left>
+inoremap [] []<Left>
+inoremap '' ''<Left>
+inoremap "" ""<Left>
+inoremap \|\| \|\|<Left>
+inoremap // //<Left>
+
 
 " statusline mod
 " see :help 'statusline
@@ -204,7 +224,6 @@ function! ModeStatus()
 endfunction
 
 set statusline=         " reset
-set statusline+=%#buftablineactive# " set colour to #todo#
 set statusline+=\       " space
 set statusline+=%n      " buffer number
 set statusline+=%M      " modifiable/modified flag
@@ -212,65 +231,46 @@ set statusline+=%R      " Readonly flag
 set statusline+=%W      " Preview window flag
 set statusline+=\       " space
 set statusline+=%*      " reset colour
-" Linter in statusline, only show on error
-set statusline+=%#warningmsg#
-set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?LinterStatus():''}
-set statusline+=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
-set statusline+=%*
-" Linter in statusline
-set statusline+=%#warningmsg#\ %t\ %*   " file name (tail)
+" " Linter in statusline, only show on error
+" set statusline+=%#warningmsg#
+" set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?LinterStatus():''}
+" set statusline+=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
+" set statusline+=%*
+" file info
+set statusline+=%#WarningMsg#\ %t\ %*   " file name (tail)
 set statusline+=\ %{toupper(&ff)}\|     " file format, pipe
 set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
-set statusline+=%{&ft=='ruby'?'-'.g:ruby_version:''}    " ruby version
 set statusline+=\ %<%.99{expand('%:p:h')}%{has('unix')?'\/':'\\'}   " truncate, minwidth, directory containing file ('head'), space
 set statusline+=%=                      " left/right separator
+" git
 set statusline+=\ %{GitInfoStatus()}\   " Git branch name
 " mode() indicator
 set statusline+=%{CurrentMode()==0?ModeStatus():''}
-set statusline+=%#buftablinecurrent#%{CurrentMode()==1?ModeStatus():''}%*
-set statusline+=%#buftablineactive#%{CurrentMode()==2?ModeStatus():''}%*
-" mode() indicator
+set statusline+=%#ErrorMsg#%{CurrentMode()==1?ModeStatus():''}%*
+set statusline+=%#Visual#%{CurrentMode()==2?ModeStatus():''}%*
+" cursor
 set statusline+=\ %c,   " cursor column
 set statusline+=%l/%L   " cursor line/total lines
 set statusline+=\ (%P)  " space, percent through file, space
 
-" 20181126
-" set statusline=         " reset
-" set statusline+=%#todo# " set colour to #todo#
-" set statusline+=[       " open bracket
-" set statusline+=%n      " buffer number
-" set statusline+=%M      " modifiable/modified flag
-" set statusline+=%R      " Readonly flag
-" set statusline+=%W      " Preview window flag
-" set statusline+=]%*     " close bracket, reset colour
-" " Linter in statusline
-" set statusline+=%#warningmsg#
-" set statusline+=%{exists('g:loaded_ale')&&g:loaded_ale?'['.LinterStatus().']':''}
-" set statusline+=%{exists('*SyntasticStatuslineFlag')?SyntasticStatuslineFlag():''}
-" set statusline+=%*
-" " Linter in statusline
-" set statusline+=\ %<%.99F\  " space, truncate, min width, full path of the filename, space
-" set statusline+=[           " open bracket
-" set statusline+=%{&ff}\|    " file format, pipe
-" set statusline+=%{strlen(&ft)?&ft:'NA'} " file type
-" set statusline+=%{&ft=='ruby'?'-'.g:ruby_version:''}    " ruby version
-" set statusline+=]       " close bracket
-" set statusline+=%=      " left/right separator
-" set statusline+=%c,     " cursor column
-" set statusline+=%l/%L   " cursor line/total lines
-" set statusline+=\ (%P)  " space, percent through file
-" statusline mod
 
+" netrw Explorer
+let g:netrw_liststyle = 3 " Can cycle through `i`
+" How files will be opened;
+" 1: horizontal split
+" 2: vertial split
+" 3: new tab
+" 4: previous window
+let g:netrw_browse_split = 2
+" Set width of the explorer
+let g:netrw_winsize = 25
+" Enable the folllow for always on Explorer
+" augroup netrwExplorer
+"     autocmd!
+"     au VimEnter * :Vexplore!    " ! place explorer on the right
+"     au VimEnter * wincmd h      " focus, h or l depends on above
+" augroup END
 
-" vim-buftabline
-let g:buftabline_numbers = 1
-let g:buftabline_separators = 1
-
-" CtrlP
-let g:ctrlp_working_path_mode = ''  " disble local working directory
-nnoremap <leader>ff :CtrlP<cr>
-nnoremap <leader>fb :CtrlPBuffer<cr>
-nnoremap <leader>fl :CtrlPLine<cr>
 
 " ale (async linting)
 " let g:ale_lint_on_enter = 0               " 1
@@ -313,77 +313,26 @@ let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
 " let g:syntastic_check_on_wq = 0
 
-" netrw Explorer
-let g:netrw_liststyle = 3 " Can cycle through `i`
-" How files will be opened;
-" 1: horizontal split
-" 2: vertial split
-" 3: new tab
-" 4: previous window
-let g:netrw_browse_split = 2
-" Set width of the explorer
-let g:netrw_winsize = 25
-" Enable the folllow for always on Explorer
-" augroup netrwExplorer
-"     autocmd!
-"     au VimEnter * :Vexplore!    " ! place explorer on the right
-"     au VimEnter * wincmd h      " focus, h or l depends on above
-" augroup END
-
-
-" switch javascript on
-let g:my_file_type = 0
-function! ToggleFileType()
-    if g:my_file_type == 0
-        setlocal ft=javascript
-        let g:my_file_type = 1
-    else
-        filetype detect
-        let g:my_file_type = 0
-    endif
-endfunction
-nmap <silent> ;s :call ToggleFileType()<CR>
-
-
-" adopt ruby environment, windows
-if s:running_windows
-    " pik
-    " let s:pik_ruby_info = system('pik info')
-    " if len(s:pik_ruby_info) > 0
-    "     let s:pik_ruby_version = matchlist(s:pik_ruby_info, 'version: *"\([^"]\+\)*"')[1]
-    "     let s:pik_ruby_dir = matchlist(s:pik_ruby_info, 'binaries:\nruby: *"\([^"]\+\)*"')[1].'\'
-    "     let g:ruby_default_path = [s:pik_ruby_dir]  " accepts a list!
-    " endif
-
-    " uru
-    let s:uru_ruby_ls = system('uru ls --verbose')
-    if len(s:uru_ruby_ls) > 0
-        let s:uru_ruby_info = matchstr(s:uru_ruby_ls, '=>\(.\{-}\n\)\{3}')
-        " begin match with =>
-        " then group \( anything . as little as possible \{-} until newline \n \) 
-        " stops at match count \{3}
-        let s:uru_ruby = split(s:uru_ruby_info,'\n')
-        let s:uru_ruby_dir = substitute(s:uru_ruby[2], ' *Home: ', '', 'g')
-        let g:ruby_version = substitute(s:uru_ruby[1], ' *ID: ', '', 'g')
-        let g:ruby_default_path = [s:uru_ruby_dir]  " accepts a list!
-    endif
-endif
-
-if s:running_unix
-    " uses rbenv
-    if len(system('which rbenv')) > 0
-        let s:this_ruby_info = system('rbenv version')
-        if len(s:this_ruby_info) > 0
-            " let g:ruby_version = matchstr(s:this_ruby_info, '\(.\{-}\s\)') " this includes the space character
-            let g:ruby_version = matchstr(s:this_ruby_info, '\d*.\d*.\d*')
-        endif
-    else
-        let g:ruby_version = 'NOTFOUND'
-    endif
-endif
-
-
+" sneak
+let g:sneak#label = 1
+ 
+ 
 " prettyprint JSON in buffer
 function! Ppjson()
     %!python -m json.tool
 endfunction
+nmap <silent> ;pp :call Ppjson()<CR>
+
+
+" switch javascript on
+let g:view_as_js = 0
+function! Sjs()
+    if g:view_as_js == 0
+        setlocal ft=javascript
+        let g:view_as_js = 1
+    else
+        filetype detect
+        let g:view_as_js = 0
+    endif
+endfunction
+nmap <silent> ;js :call Sjs()<CR>

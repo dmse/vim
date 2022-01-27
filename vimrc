@@ -29,6 +29,7 @@ Plug 'vim-ruby/vim-ruby'
 Plug 'vim-python/python-syntax'
 Plug 'rhysd/vim-crystal'
 Plug 'cespare/vim-toml'
+Plug 'rust-lang/rust.vim'
 " plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -65,6 +66,22 @@ set t_Co=256
 set background=dark
 silent! colorscheme nord  " load prefered colour, skip error
 
+" detect current resolution in linux, set vim resolution
+function! SetLC()
+    let cmd = "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1"
+    let rst = trim(system(cmd))
+    " echom rst
+    if rst == '3840'
+        set lines=61 columns=210    " resolution for 4k screen
+    elseif rst == '2560'
+        set lines=50 columns=150    " resolution for 2k screen
+    elseif rst == '1920'
+        set lines=30 columns=140    " resolution for 1080 screen
+    else
+        set lines=24 columns=80     " resolution for anything lower screen
+    end
+endfunction
+
 if has("gui_running") && s:running_windows
     " remove extra gui elements
     set guioptions=
@@ -72,13 +89,12 @@ if has("gui_running") && s:running_windows
     " set guioptions-=T
     " set guioptions-=m
     set guifont=JetBrains\ Mono\ NL:h9,Ubuntu\ Mono:h11,Menlo:h9,Consolas:h9
-    " set lines=50 columns=150
-    set lines=61 columns=210    " resolution for a 4k screen
 elseif has("gui_macvim")
     set guifont=Menlo:h11
 elseif has("gui_running") && has("unix")
     set guioptions=Tm
-    set guifont=JetBrains\ Mono\ 10,DejaVu\ Sans\ Mono\ 10
+    set guifont=JetBrains\ Mono\ 9
+    call SetLC()
 endif
 
 if v:version > 703 || v:version == 703 && has('patch541')

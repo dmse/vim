@@ -69,7 +69,11 @@ silent! colorscheme nord  " load prefered colour, skip error
 
 " detect current resolution in linux, set vim resolution
 function! SetLC()
-    let cmd = "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1"
+    if has("gui_macvim")
+        let cmd = "system_profiler SPDisplaysDataType | awk '/Resolution/{print $2}'"
+    elseif has("gui_running") && has("unix")
+        let cmd = "xrandr --current | grep '*' | uniq | awk '{print $1}' | cut -d 'x' -f1"
+    endif
     let rst = trim(system(cmd))
     " echom rst
     if rst == '3840'
@@ -91,7 +95,8 @@ if has("gui_running") && s:running_windows
     " set guioptions-=m
     set guifont=JetBrains\ Mono\ NL:h9,Ubuntu\ Mono:h11,Menlo:h9,Consolas:h9
 elseif has("gui_macvim")
-    set guifont=Menlo:h11
+    set guifont=JetBrains\ Mono:h12,Menlo:h11
+    call SetLC()
 elseif has("gui_running") && has("unix")
     set guioptions=Tm
     set guifont=JetBrains\ Mono\ 9
@@ -148,7 +153,7 @@ nnoremap j gj
 nnoremap k gk
 
 let mapleader = "\<space>"
-nnoremap <leader>ev :vsplit $MYVIMRC<CR>
+nnoremap <leader>ev :edit $MYVIMRC<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
 " buffer navigation

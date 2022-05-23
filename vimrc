@@ -30,7 +30,7 @@ Plug 'vim-python/python-syntax'
 Plug 'rhysd/vim-crystal'
 Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim'
-" Plug 'chr4/nginx'
+Plug 'chr4/nginx'
 " plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -226,7 +226,7 @@ let g:currentmode={
       \ }
 
 function! GitInfoStatus()
-  return exists('g:loaded_fugitive')&&g:loaded_fugitive&&fugitive#head()!=''?fugitive#head():''
+  return exists('g:loaded_fugitive')&&g:loaded_fugitive&&FugitiveHead()!=''?FugitiveHead():''
 endfunction
 
 function! CurrentMode()

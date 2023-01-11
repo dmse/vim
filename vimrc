@@ -30,6 +30,7 @@ Plug 'vim-python/python-syntax'
 Plug 'rhysd/vim-crystal'
 Plug 'cespare/vim-toml'
 Plug 'rust-lang/rust.vim'
+Plug 'chr4/nginx'
 " plugins
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-surround'
@@ -137,6 +138,8 @@ set linebreak           " wrap long lines at characters in 'breakat'
 if has('linebreak')
     let &showbreak=' '  " display a leading space when line is wrapped
 endif
+
+set shortmess-=S
 
 " mouse setting
 behave xterm

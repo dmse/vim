@@ -94,7 +94,7 @@ if has("gui_running") && s:running_windows
     " set guioptions-=m
     set guifont=JetBrains\ Mono\ NL:h9,Ubuntu\ Mono:h11,Menlo:h9,Consolas:h9
 elseif has("gui_macvim")
-    set guifont=JetBrains\ Mono:h12,Menlo:h11
+    set guifont=JetBrains\ Mono:h13,Menlo:h11
     call SetLC()
 elseif has("gui_running") && has("unix")
     set guioptions=Tm
@@ -223,7 +223,8 @@ let g:currentmode={
       \ }
 
 function! GitInfoStatus()
-  return exists('g:loaded_fugitive')&&g:loaded_fugitive&&fugitive#head()!=''?fugitive#head():''
+  " return exists('g:loaded_fugitive')&&g:loaded_fugitive&&fugitive#head()!=''?fugitive#head():''
+  return exists('g:loaded_fugitive')&&g:loaded_fugitive&&FugitiveHead()!=''?FugitiveHead():''
 endfunction
 
 function! CurrentMode()
